@@ -153,19 +153,7 @@
         }
     }
 
-    // document.addEventListener("DOMContentLoaded", () => {
-    //     const navItems = document.querySelectorAll("[data-nav-item]");
-    //     const currentPath = window.location.pathname;
-
-    //     navItems.forEach(item => {
-    //         const itemPath = item.getAttribute("href");
-    //         if (currentPath.includes(itemPath)) {
-    //             item.classList.add("text-gray-800", "dark:text-white", "bg-gray-200", "dark:bg-gray-800", "rounded-md");
-    //         } else {
-    //             item.classList.remove("text-gray-800", "dark:text-white", "bg-gray-200", "dark:bg-gray-800", "rounded-md");
-    //         }
-    //     });
-    // });
+    
     document.addEventListener("DOMContentLoaded", () => {
     const navItems = document.querySelectorAll("[data-nav-item]");
     const currentPath = window.location.pathname;

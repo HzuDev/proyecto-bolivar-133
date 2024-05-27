@@ -69,6 +69,11 @@ $db = conectarDB();
             <nav class="flex justify-between my-8">
                 <ul class="mt-4 flex flex-wrap gap-4 sm:gap-8">
                     <li>
+                        <a href="\proyectobolivar\tienda.php" class="text-sm text-gray-700 hover:text-gray-900">
+                            Todos los Productos
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" id="ropapuma" class="category text-sm text-gray-700 hover:text-gray-900">
                             Ropa PUMA
                         </a>
@@ -96,7 +101,7 @@ $db = conectarDB();
             <p class="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg">Aquí puedes encontrar todos nuestros productos disponibles.</p>
         </div>
 
-        <div id="productContainer" class=" grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
+        <div id="productContainer" class="grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
             <?php
             $categorias = ['ropapuma', 'ropacasual', 'accesorios'];
             foreach ($categorias as $categoria) {
@@ -106,7 +111,7 @@ $db = conectarDB();
                     $rutaImagen = "/proyectoBolivar/admin/tienda/$categoria/imagenes/" . $fila['imagen'];
             ?>
                     <li class="list-none">
-                        <a href="#" class="group block overflow-hidden relative">
+                        <a href="#" class="group block overflow-hidden relative" data-category="<?php echo $categoria; ?>" data-id="<?php echo $fila['codigo']; ?>" onclick="showModal(event, '<?php echo $categoria; ?>', <?php echo $fila['codigo']; ?>)">
                             <span class="absolute top-0 left-0 w-28 translate-y-4 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white"><?php echo $fila['etiqueta']; ?></span>
                             <img src="<?php echo $rutaImagen; ?>" alt="<?php echo $fila['titulo']; ?>" class="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]" />
                             <div class="relative bg-white pt-3">
@@ -120,8 +125,6 @@ $db = conectarDB();
                             </div>
                         </a>
                     </li>
-
-
             <?php
                 }
             }
@@ -130,6 +133,59 @@ $db = conectarDB();
     </div>
 
 </div>
+<!-- modal -->
+<section id="productModal" class="text-gray-600 body-font overflow-hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="container mx-auto">
+        <div class="bg-white rounded-lg shadow-lg lg:w-4/5 mx-auto flex flex-wrap p-5">
+            <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+                <!-- <h2 class="text-sm title-font text-gray-500 tracking-widest" id="modalBrand">Nombre Del producto</h2> -->
+                <h1 class="text-gray-900 text-3xl title-font font-medium mb-4" id="modalTitle">Product Title</h1>
+                <div class="flex mb-4">
+                    <a class="flex-grow text-green-500 border-b-2 border-green-500 py-2 text-lg px-1">Descripción</a>
+                </div>
+                <p class="leading-relaxed mb-4" id="modalDescription">Product description goes here.</p>
+                <div class="flex border-t border-gray-200 py-2">
+                    <span class="text-gray-500">Etiqueta</span>
+                    <span class="ml-auto text-gray-900" id="modalEtiqueta">Etiqueta Value</span>
+                </div>
+                <div class="flex border-t border-gray-200 py-2">
+                    <span class="text-gray-500">Talla</span>
+                    <span class="ml-auto text-gray-900" id="modalTalla">Talla Value</span>
+                </div>
+                <div class="flex border-t border-gray-200 py-2">
+                    <span class="text-gray-500">Color</span>
+                    <span class="ml-auto text-gray-900" id="modalColor">Color Value</span>
+                </div>
+                <div class="flex border-t border-gray-200 py-2">
+                    <span class="text-gray-500">Material</span>
+                    <span class="ml-auto text-gray-900" id="modalMaterial">Material Value</span>
+                </div>
+                <div class="flex border-t border-gray-200 py-2">
+                    <span class="text-gray-500">Estado</span>
+                    <span class="ml-auto text-gray-900" id="modalEstado">Estado Value</span>
+                </div>
+                <div class="flex border-t border-b mb-6 border-gray-200 py-2">
+                    <span class="text-gray-500">Precio</span>
+                    <span class="ml-auto text-gray-900" id="modalPrice">Price Value</span>
+                </div>
+                <div class="flex">
+                    <button class="flex ml-auto text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded" onclick="hideModal()">Cerrar</button>
+                </div>
+            </div>
+            <img id="modalImage" alt="ecommerce" class="lg:w-1/2 w-full lg:h-30 h-30 object-cover object-center rounded" src="https://dummyimage.com/400x400">
+        </div>
+    </div>
+</section>
+<!-- fin modal -->
+<?php
+incluirTemplate('sponsors');
+?>
+
+<?php
+incluirTemplate('footer');
+?>
+</div>
+<scritp src="modal.js"></scritp>
 <script>
     document.querySelectorAll('.category').forEach(function(element) {
         element.addEventListener('click', function(e) {
@@ -164,4 +220,51 @@ $db = conectarDB();
             loadProducts(category);
         });
     });
+
+    function showModal(event, category, productId) {
+        event.preventDefault();
+
+        fetch(
+                `/proyectoBolivar/admin/tienda/get-product-details.php?category=${category}&id=${productId}`
+            )
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                const product = data.data;
+                if (!product) {
+                    alert("Product not found");
+                    return;
+                }
+
+                document.getElementById("modalTitle").textContent = product.titulo;
+                document.getElementById("modalEtiqueta").textContent = product.etiqueta;
+                document.getElementById("modalTalla").textContent = product.talla;
+                document.getElementById("modalColor").textContent = product.color;
+                document.getElementById("modalMaterial").textContent = product.material;
+                document.getElementById("modalEstado").textContent = product.estado;
+                const precio = parseFloat(product.precio);
+                if (!isNaN(precio)) {
+                    document.getElementById(
+                        "modalPrice"
+                    ).textContent = `BOB ${precio.toFixed(2)}`;
+                } else {
+                    document.getElementById("modalPrice").textContent = "Not available";
+                }
+                document.getElementById(
+                    "modalImage"
+                ).src = `/proyectoBolivar/admin/tienda/${category}/imagenes/${product.imagen}`;
+                document.getElementById("productModal").classList.remove("hidden");
+            })
+            .catch((error) => console.error("Error fetching product details:", error));
+    }
+
+    function hideModal() {
+        document.getElementById("productModal").classList.add("hidden");
+    }
 </script>

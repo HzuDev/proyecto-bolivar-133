@@ -35,7 +35,7 @@ incluirTemplate('header');
             </p>
         </div>
     </div>
-    <div class="mx-auto max-w-screen-md px-4 md:px-8bg-blue-100 p-8 rounded-lg shadow-md">
+    <div class="mx-auto max-w-screen-md px-4 md:px-8bg-blue-100 p-8 rounded-lg shadow-md my-10">
         <h2 class=" text-2xl font-bold text-blue-800 mb-4">Tienda Virtual y Venta de Entradas</h2>
         <p class=" mb-4 text-gray-700">
             Nuestra tienda virtual es la puerta de entrada a una experiencia única con el Club Bolívar. Aquí podrás adquirir no solo la indumentaria oficial y accesorios exclusivos del club, sino también asegurar tu lugar en los partidos más emocionantes con solo unos clics.
@@ -53,6 +53,9 @@ incluirTemplate('header');
 
 
 </section>
+<?php
+incluirTemplate('sponsors');
+?>
 
 <?php
 incluirTemplate('footer');
