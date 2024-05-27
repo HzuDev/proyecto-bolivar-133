@@ -29,7 +29,7 @@ if ($_POST) {
 ?>
         <script>
             alert("SE REGISTRO");
-            location.href = 'listado.php';
+            location.href = 'listar-ropa-puma.php';
         </script>
 <?php
     } else

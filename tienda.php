@@ -107,7 +107,7 @@ $db = conectarDB();
             ?>
                     <li class="list-none">
                         <a href="#" class="group block overflow-hidden relative">
-                            <span class="absolute top-0 left-0 w-28 translate-y-4 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white">Sale</span>
+                            <span class="absolute top-0 left-0 w-28 translate-y-4 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white"><?php echo $fila['etiqueta']; ?></span>
                             <img src="<?php echo $rutaImagen; ?>" alt="<?php echo $fila['titulo']; ?>" class="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]" />
                             <div class="relative bg-white pt-3">
                                 <h3 class="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
